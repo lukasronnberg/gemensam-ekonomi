@@ -167,12 +167,6 @@ Workflow finns i `.github/workflows/ci.yml` och körs på push/PR:
 - Kör Ruff, Black‑check, Pytest
 - Bygger mot Python 3.11 och 3.12
 
-Lägg gärna en badge överst i README (uppdatera `<YOUR_USERNAME>`):
-
-```markdown
-![CI](https://github.com/<YOUR_USERNAME>/gemensam-ekonomi/actions/workflows/ci.yml/badge.svg)
-```
-
 ---
 
 ## Felsökning
