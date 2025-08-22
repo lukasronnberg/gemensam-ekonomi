@@ -189,8 +189,6 @@ Workflow finns i `.github/workflows/ci.yml` och körs på push/PR:
 
 -
 
-Skapa gärna GitHub Issues för punkterna ovan och länka dem här.
-
 ---
 
 ## Versioner & licens
