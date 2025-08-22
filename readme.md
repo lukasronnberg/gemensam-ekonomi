@@ -1,5 +1,6 @@
 # Gemensam Ekonomi (MVP)
-
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 [![CI](https://github.com/lukasronnberg/gemensam-ekonomi/actions/workflows/ci.yml/badge.svg)](https://github.com/<YOUR_USERNAME>/gemensam-ekonomi/actions/workflows/ci.yml)
 
 
