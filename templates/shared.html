@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-lg font-semibold mb-3">Sparkonto</h2>
+
+<div class="bg-white rounded-xl p-4 shadow mb-4">
+  <div class="text-sm text-gray-600">Aktuellt saldo</div>
+  <div class="text-2xl font-bold">{{ saldo }} kr</div>
+</div>
+
+<form action="/shared/add" method="post" class="bg-white rounded-xl p-4 shadow space-y-3 mb-4">
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <label class="block text-sm">Datum</label>
+      <input name="date" type="date" required class="w-full border rounded p-2">
+    </div>
+    <div>
+      <label class="block text-sm">Typ</label>
+      <select name="type" class="w-full border rounded p-2">
+        <option value="deposit">Insättning</option>
+        <option value="payout">Utbetalning</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm">Person (vid utbetalning)</label>
+      <select name="member_id" class="w-full border rounded p-2">
+        <option value="">—</option>
+        {% for m in members %}
+          <option value="{{ m.id }}">{{ m.display_name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div>
+      <label class="block text-sm">Belopp (kr)</label>
+      <input name="amount" type="number" step="0.01" required class="w-full border rounded p-2">
+    </div>
+  </div>
+  <div>
+    <label class="block text-sm">Kommentar</label>
+    <input name="note" class="w-full border rounded p-2">
+  </div>
+  <button class="w-full bg-black text-white rounded-xl py-2 font-semibold">Spara</button>
+</form>
+
+<div class="bg-white rounded-xl p-4 shadow">
+  <h3 class="font-semibold mb-2">Transaktioner</h3>
+  <div class="space-y-2 text-sm">
+    {% for r in rows %}
+      <div class="flex justify-between border-b pb-1">
+        <div>{{ r.date }} · {{ "Insättning" if r.type=="deposit" else "Utbetalning" }}</div>
+        <div class="font-medium">{{ r.amount }} kr</div>
+      </div>
+    {% else %}
+      <div class="text-gray-500">Inga sparkontotransaktioner ännu.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
