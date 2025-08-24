@@ -17,8 +17,9 @@ export default function Login() {
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       setStatus("Inloggad ✔️"); // App.tsx flyttar dig vidare när session finns
-    } catch (e: any) {
-      setStatus(`Fel: ${e?.message ?? String(e)}`);
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : String(e);
+      setStatus(`Fel: ${errorMessage}`);
     }
   }
 
