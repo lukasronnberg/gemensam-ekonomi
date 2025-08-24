@@ -72,32 +72,7 @@ export default function Home() {
         <div className="text-sm">Annie: {suggest.annie} kr</div>
         {/* (Senare) Knapp: Bokför föreslagen utbetalning */}
       </div>
-      {import.meta.env.DEV && (
-        <button
-         onClick={async () => {
-         const { data, error } = await supabase.auth.getSession();
-         if (error) { alert(error.message); return; }
-         const rt = data.session?.refresh_token;
-         if (!rt) { alert("Ingen refresh token i sessionen."); return; }
-
-         // Robust URL som funkar med Vites base (t.ex. /gemensam-ekonomi/)
-         const url = `${window.location.origin}${import.meta.env.BASE_URL}login?rt=${encodeURIComponent(rt)}`;
-
-         try {
-         await navigator.clipboard.writeText(url);
-         console.log("Provision-länk:", url);
-         alert("Provision-länk kopierad till urklipp och loggad i konsolen.");
-         } catch {
-            console.log("Provision-länk:", url);
-            alert("Kunde inte kopiera automatiskt. Länken finns i konsolen.");
-            }
-         }}
-         className="text-xs underline text-gray-500"
-         title="Skapar en engångslänk som loggar in en ny enhet utan mejl"
-          >
-            Skapa provision-länk (dev)
-        </button>
-      )}
+      
 
     </div>
   );
