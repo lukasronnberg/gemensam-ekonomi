@@ -1,7 +1,0 @@
-fastapi
-uvicorn[standard]
-jinja2
-sqlmodel>=0.0.22
-alembic
-pydantic
-python-multipart

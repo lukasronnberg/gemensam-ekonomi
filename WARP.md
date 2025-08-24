@@ -4,86 +4,95 @@ This file provides guidance to WARP (warp.dev) when working with code in this re
 
 ## Project Overview
 
-Gemensam Ekonomi is a Swedish household expense sharing web application built with FastAPI and SQLModel. It tracks shared expenses between household members (primarily Lukas and Annie), manages expense splitting calculations, and maintains a shared savings account.
+Gemensam Ekonomi is a Swedish household expense sharing web application built with React, TypeScript, and Vite. It tracks shared expenses between household members (primarily Lukas and Annie), manages expense splitting calculations, and maintains a shared savings account using Supabase as the backend.
 
 ## Development Commands
 
 ### Environment Setup
 ```bash
-# Activate virtual environment
-source .venv/bin/activate
-
 # Install dependencies
-pip install -r requirements.txt
+npm install
 ```
 
 ### Running the Application
 ```bash
-# Start development server with auto-reload
-python -m uvicorn backend.app:app --reload
+# Start development server
+npm run dev
 
-# Start on specific host/port
-python -m uvicorn backend.app:app --reload --host 0.0.0.0 --port 8080
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
 ### Testing
 ```bash
 # Run all tests
-python -m pytest backend/tests/
+npm run test
 
-# Run specific test file
-python -m pytest backend/tests/test_splits.py
+# Run tests in watch mode
+npm run test:watch
 
-# Run with verbose output
-python -m pytest backend/tests/ -v
-
-# Run specific test function
-python -m pytest backend/tests/test_splits.py::test_equal_split
+# Run tests with UI
+npm run test:ui
 ```
 
 ### Code Quality
 ```bash
-# Format code with Black
-black . --line-length 100
+# Format code with Prettier
+npm run format
 
-# Lint with Ruff
-ruff check .
+# Lint with ESLint
+npm run lint
 
-# Fix auto-fixable issues
-ruff check . --fix
+# Type checking with TypeScript
+npm run typecheck
+
+# Run all checks (CI pipeline)
+npm run ci:check
 ```
 
 ## Architecture
 
-### Core Data Models (`backend/models.py`)
-- **Account**: Represents a household account container
-- **Member**: Individual household members (Lukas, Annie)
+### Frontend Stack
+- **React 19** - Modern React with latest features
+- **TypeScript 5.8** - Type safety and better developer experience
+- **Vite** - Fast build tool and development server
+- **TailwindCSS 4** - Utility-first CSS framework
+- **React Router DOM 7** - Client-side routing
+
+### Core Components (`src/pages/`)
+- **App.tsx**: Main application component with routing
+- **Home.tsx**: Dashboard showing member balances and payout suggestions
+- **Transactions.tsx**: Expense entry and transaction history
+- **Shared.tsx**: Shared savings account management
+- **Login.tsx**: Authentication interface
+
+### Business Logic (`src/lib/`)
+- **split.ts**: Expense splitting calculations
+  - `computeShares()`: Calculates individual shares based on split method
+  - `netForMember()`: Computes net balance (paid minus owed)
+- **supabase.ts**: Database connection and configuration
+
+### Data Types (`src/types.ts`)
+- **Member**: Individual household members
 - **Transaction**: Expense records with configurable splitting logic
-- **SharedSavingsTx**: Shared savings account deposits/payouts
-- **Budget**: Monthly budget tracking (not actively used)
+- **SharedSavingsTx**: Shared savings account transactions
+- **SplitMethod**: Splitting calculation methods (equal, percent, fixed)
 
-### Expense Splitting System (`backend/services/splits.py`)
-The application implements three splitting methods:
-- **Equal**: 50/50 split between members
-- **Percent**: Custom percentage split (stored as Lukas percentage)
-- **Fixed**: Fixed amount for one member, remainder for the other
-
-Key functions:
-- `compute_shares()`: Calculates individual shares based on split method
-- `net_for_member()`: Computes net balance (paid minus owed)
-
-### Database Layer (`backend/db.py`)
-- Uses SQLModel with SQLite by default (`data.db`)
-- PostgreSQL support via `DATABASE_URL` environment variable
-- Database initialization handled on startup
-
-### Web Interface
-- **FastAPI** backend with Jinja2 templates
-- **TailwindCSS** for styling
-- **Progressive Web App** (PWA) support with service worker
-- Swedish language interface
+### Backend Integration
+- **Supabase** - PostgreSQL database with real-time features
+- **Authentication** - Supabase Auth for user management
+- **Real-time updates** - Live data synchronization
 
 ## Key Business Logic
+
+### Expense Splitting System
+The application implements three splitting methods:
+- **Equal**: 50/50 split between members
+- **Percent**: Custom percentage split (configurable per member)
+- **Fixed**: Fixed amount for one member, remainder for the other
 
 ### Member Balance Calculation
 The home page calculates member balances by:
@@ -92,22 +101,22 @@ The home page calculates member balances by:
 3. Calculating net balance (paid - share)
 4. Generating payout suggestions from shared savings
 
-### Data Persistence
-- Hardcoded member seeding on startup (Lukas, Annie)
-- Single household account ("Hushållet") created automatically
-- SQLite database file (`data.db`) contains all transaction history
-
-### URL Structure
-- `/` - Home dashboard with balances and payout suggestions
-- `/transactions` - Expense entry and history
-- `/shared` - Shared savings account management
+### Progressive Web App (PWA)
+- Service worker for offline functionality
+- Responsive design optimized for mobile use
+- Swedish language interface
 
 ## Configuration
 
 ### Environment Variables
-- `DATABASE_URL`: Database connection string (defaults to SQLite)
+Create a `.env` file with:
+```bash
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
 ### Development Settings
-- Black line length: 100 characters
-- Ruff target: Python 3.11
-- Selected linting rules: E, F, I (errors, Flakes, imports)
+- **ESLint**: React and TypeScript rules
+- **Prettier**: Code formatting with 2-space indentation
+- **TypeScript**: Strict mode enabled
+- **Tailwind**: Utility-first styling approach
