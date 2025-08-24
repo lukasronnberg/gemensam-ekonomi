@@ -1,28 +1,41 @@
-name: CI
+name: Web CI
 
 on:
   push:
+    branches: [ main ]
+    paths:
+      - "webapp/gemensam-eko-web/**"
+      - ".github/workflows/web-ci.yml"
   pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
+  web:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11", "3.12"]
+    defaults:
+      run:
+        working-directory: webapp/gemensam-eko-web
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Use Node
+        uses: actions/setup-node@v4
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install deps
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest ruff black
-      - name: Lint (ruff)
-        run: ruff check .
-      - name: Format check (black)
-        run: black --check .
-      - name: Tests
-        run: pytest -q
+          node-version: 20
+          cache: npm
+          cache-dependency-path: webapp/gemensam-eko-web/package.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Test
+        run: npm run test
+
+      - name: Build (smoke test)
+        run: npm run build
