@@ -1,3 +1,4 @@
+// filepath: src/main.tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
@@ -10,6 +11,7 @@ import Login from "./pages/Login";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    {/* Viktigt för GitHub Pages under /gemensam-ekonomi/ */}
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<App />}>
@@ -17,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route path="transactions" element={<Transactions />} />
           <Route path="shared" element={<Shared />} />
           <Route path="login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </BrowserRouter>
